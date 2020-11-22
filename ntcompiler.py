@@ -33,7 +33,7 @@ class ntobject():
             cursor = 0
             is_string = False
             while cursor < len(self.desc):
-                letter = self.desc(cursor)
+                letter = self.desc[cursor]
                 if letter in paren:
                     if not(is_string):
                         if letter == " ":
