@@ -1,3 +1,11 @@
+import sys
+import os
+import datatype as dt
+
+
+
+
+
 def init():
     version = 0.1
     author = "locha"
@@ -71,7 +79,12 @@ class ntobject():
                             if right_indi_is_string:
                                 self.node[self.mother][left_indi] = right_indi
                             else:
-                                self.node[self.mother][left_indi] = int(right_indi)
+                                if dt.is_int(right_indi):
+                                    self.node[self.mother][left_indi] = int(right_indi)
+                                elif dt.is_float(right_indi):
+                                    self.node[self.mother][left_indi] = float(right_indi)
+                                elif dt.is_bool(right_indi):
+                                    self.node[self.mother][left_indi] = bool(right_indi)
                             word = ""
                         elif letter == "{":
                             self.mother = word.strip('\n')
