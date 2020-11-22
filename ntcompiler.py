@@ -17,65 +17,74 @@ class ntobject():
         try:
             self.desc = ""
             self.node = {}
-            with open(route, 'r', encoding='UTF8') as file:
+            with open(route, 'r', encoding='UTF-8') as file:
                 file = file.readlines()
             for lines in file:
                 self.desc += lines
+            self.readdesc()
         except:
-            print("[nt] ERROR OCCURED WHILE LOADING NODETYPE")
-            print("[nt] FOR MORE INFO : CONTACT locha0305@naver.com")
+            print("[nt] ERROR OCCURED WHILE LOADING NODETYPE FILE")
+        
     def readdesc(self):
         try:
-            self.parse = ""
             word = ""
             paren = " {}():"
             self.mother = None
+            is_paren_open = False
             cursor = 0
             is_string = False
+            print(self.desc)
             while cursor < len(self.desc):
                 letter = self.desc[cursor]
-                if letter in paren:
-                    if not(is_string):
+                if not(is_string):
+                    if letter in paren:
                         if letter == " ":
-                            self.parse += word + " "
-                            try:
-                                if self.desc[cursor + 1] == "{":
-                                    pass
-                                else:
-                                    word = ""
-                            except:
-                                word = ""
+                            word = ""
                         elif letter == "\n":
-                            self.parse += word + "\n"
-                            try:
-                                if self.desc[cursor + 1] == "{":
-                                    pass
-                                else:
-                                    word = ""
-                            except:
-                                word = ""
                             word = ""
                         elif letter == ":":
-                            left_indi = word
+                            left_indi = word.strip('\n')
+                            print(word)
                             word = ""
-                            jump = 0
-                            while letter[jump] != "\n" and letter[jump] != " ":
+                            jump = 1
+                            right_indi_is_string = False
+                            string_indi = False
+                            while self.desc[cursor + jump] != "\n" and not(is_string):
+                                if self.desc[cursor + jump] == '"' and not(is_string):
+                                    is_string = True
+                                    string_indi = True
+                                if self.desc[cursor + jump] == '"' and is_string:
+                                    is_string = False
+                                    right_indi_is_string = True
+                                    string_indi = True
+                                else:
+                                    pass
+                                if not(string_indi):
+                                    word += self.desc[cursor + jump]
+                                else:
+                                    string_indi = False
                                 jump += 1
-                                word += letter[jump]
-                            right_indi = word
-                            word = ""
-                            cursor += (jump - 1)
-                            self.node[self.mother][left_indi] = right_indi
-                        elif letter == "{":
-                            if self.desc[cursor - 1] == " " or self.desc[cursor - 1] == "\n":
-                                self.mother = word
-                                self.node[word] = {}
-                                word = ""
+                            cursor += jump
+                            right_indi = word.strip("\n")
+                            print(left_indi)
+                            print(word)
+                            if right_indi_is_string:
+                                self.node[self.mother][left_indi] = right_indi
                             else:
-                                self.mother = word
-                                self.node[word] = {}
-                                word = ""
+                                self.node[self.mother][left_indi] = int(right_indi)
+                            word = ""
+                        elif letter == "{":
+                            self.mother = word.strip('\n')
+                            print(self.mother)
+                            self.node[self.mother] = {}
+                            word = ""
+                            is_paren_open = True
+                        elif letter == "}":
+                            self.mother = None
+                            word = ""
+                            is_paren_open = False
+                    else:
+                        word += letter
                 cursor += 1
         except:
             print("[nt] ERROR OCCURED WHILE COMPILING")
-            print("[nt] FOR MORE INFO : CONTACT locha0305@naver.com")
