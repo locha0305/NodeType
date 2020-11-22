@@ -59,7 +59,7 @@ class ntobject():
                             left_indi = word
                             word = ""
                             jump = 0
-                            while letter[jump] != "\n":
+                            while letter[jump] != "\n" and letter[jump] != " ":
                                 jump += 1
                                 word += letter[jump]
                             right_indi = word
