@@ -41,7 +41,6 @@ class ntobject():
             is_paren_open = False
             cursor = 0
             is_string = False
-            print(self.desc)
             while cursor < len(self.desc):
                 letter = self.desc[cursor]
                 if not(is_string):
@@ -52,7 +51,6 @@ class ntobject():
                             word = ""
                         elif letter == ":":
                             left_indi = word.strip('\n')
-                            print(word)
                             word = ""
                             jump = 1
                             right_indi_is_string = False
@@ -74,8 +72,6 @@ class ntobject():
                                 jump += 1
                             cursor += jump
                             right_indi = word.strip("\n")
-                            print(left_indi)
-                            print(word)
                             if right_indi_is_string:
                                 self.node[self.mother][left_indi] = right_indi
                             else:
@@ -84,11 +80,13 @@ class ntobject():
                                 elif dt.is_float(right_indi):
                                     self.node[self.mother][left_indi] = float(right_indi)
                                 elif dt.is_bool(right_indi):
-                                    self.node[self.mother][left_indi] = bool(right_indi)
+                                    if right_indi == "True":
+                                        self.node[self.mother][left_indi] = True
+                                    else:
+                                        self.node[self.mother][left_indi] = False
                             word = ""
                         elif letter == "{":
                             self.mother = word.strip('\n')
-                            print(self.mother)
                             self.node[self.mother] = {}
                             word = ""
                             is_paren_open = True
@@ -101,3 +99,10 @@ class ntobject():
                 cursor += 1
         except:
             print("[nt] ERROR OCCURED WHILE COMPILING")
+    def attr(self, attr_name):
+        return self.node[attr_name]
+
+
+
+        
+
