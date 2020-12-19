@@ -1,2 +1,4 @@
 # NodeType
-Python(or more) type builder
+Python(or more) object builder
+
+developer : locha
